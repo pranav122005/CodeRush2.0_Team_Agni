@@ -6,6 +6,7 @@ load_dotenv()
 class Settings:
     ALGORAND_NETWORK: str = os.getenv("ALGORAND_NETWORK", "testnet")
     ALGORAND_FACILITATOR_MNEMONIC: str = os.getenv("ALGORAND_FACILITATOR_MNEMONIC", "")
+    ALGORAND_WALLET_ADDRESS: str = os.getenv("ALGORAND_WALLET_ADDRESS", "")
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
 

@@ -5,6 +5,7 @@ from database import engine, Base, get_db
 from schemas import X402PaymentPayload, PaymentResponse
 from services.payment import process_payment
 from fastapi.responses import FileResponse
+from config import settings
 import os
 
 Base.metadata.create_all(bind=engine)
@@ -36,10 +37,11 @@ def get_content(content_id: str, receipt_id: str = None, db: Session = Depends(g
             detail={
                 "message": "Payment Required",
                 "x402_payload_template": {
-                    "amount": 1.5,
-                    "currency": "ALGO",
+                    "amount": 1.50,
+                    "currency": "USDC",
+                    "asset_id": "10458941",
                     "resource_identifier": content_id,
-                    "recipient_address": "FACILITATOR_ADDRESS_HERE"
+                    "recipient_address": settings.ALGORAND_WALLET_ADDRESS
                 }
             }
         )

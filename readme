@@ -1,0 +1,52 @@
+# 🎬 Netflix x402 Staging & Nexus Mesh Architecture
+
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+
+Welcome to the **Netflix x402 Staging** project. This repository contains a full-stack video platform clone featuring integrated multi-chain cryptocurrency payments and receipt generation.
+
+## 📑 Table of Contents
+- [Architecture Overview](#-architecture-overview)
+- [Project Structure](#-project-structure)
+- [Features](#-features)
+- [Interactive Setup Guide](#-interactive-setup-guide)
+
+---
+
+## 🏗 Architecture Overview
+
+This project is divided into three primary micro-environments:
+
+1. **Frontend UI (`/frontend`)**: A Vite and React-based user interface featuring Tailwind CSS for styling. It includes core streaming components like a `VideoPlayer`, `MovieGrid`, and a `PaymentModal` for premium access.
+2. **Core Backend (`/backend`)**: A Python-based database API that handles user administration, cryptographic wallet verifications (mnemonics, checksums), and automatic PDF receipt generation.
+3. **Nexus Mesh (`/nexus-mesh`)**: A decentralized settlement engine with routing logic and adapters for Solana, Ethereum, and Algorand networks.
+
+---
+
+## 📂 Project Structure
+
+<details>
+<summary><b>Click to expand the full directory tree</b></summary>
+
+```text
+netflix-x402-package-staging/
+│
+├── backend/                  # Core Python API
+│   ├── services/             # Admin, Algorand, Ethereum, and Payment services
+│   ├── receipts/             # Automated PDF invoice directory 
+│   ├── models.py & main.py   # Database models and entry point
+│   └── verify_mnemonic.py    # Wallet recovery and security validation
+│
+├── frontend/                 # React + Vite Client
+│   ├── src/components/       # UI Components (VideoPlayer, MovieGrid, PaymentModal)
+│   ├── src/services/         # API integration routing
+│   └── tailwind.config.js    # UI styling configuration
+│
+├── nexus-mesh/               # Blockchain Settlement Layer
+│   ├── app/settlement/       # Network Adapters (Solana, Ethereum, Algorand)
+│   ├── app/verification/     # Security (Replay Guard)
+│   └── NEXUS_MESH_DEVELOPER_GUIDE.md
+│
+└── start.ps1                 # Master Windows deployment script

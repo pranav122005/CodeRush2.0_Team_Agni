@@ -1,20 +1,24 @@
-import os
-from dotenv import load_dotenv
+from sqlalchemy import Column, Integer, String, Float, DateTime
+from database import Base
+import datetime
 
-load_dotenv()
+class PaymentRecord(Base):
+    __tablename__ = "payments"
 
-class Settings:
-    ALGORAND_NETWORK: str = os.getenv("ALGORAND_NETWORK", "testnet")
-    ALGORAND_FACILITATOR_MNEMONIC: str = os.getenv("ALGORAND_FACILITATOR_MNEMONIC", "")
-    ALGORAND_WALLET_ADDRESS: str = os.getenv("ALGORAND_WALLET_ADDRESS", "")
-    HOST: str = os.getenv("HOST", "0.0.0.0")
-    PORT: int = int(os.getenv("PORT", "8000"))
+    id = Column(Integer, primary_key=True, index=True)
+    payment_id = Column(String, unique=True, index=True)
+    transaction_id = Column(String, unique=True, index=True)
+    amount = Column(Float)
+    currency = Column(String)
+    resource_identifier = Column(String)
+    status = Column(String) # 'pending', 'succeeded', 'failed'
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
-    # PostgreSQL connection
-    DB_HOST: str = os.getenv("DB_HOST", "localhost")
-    DB_PORT: str = os.getenv("DB_PORT", "5432")
-    DB_NAME: str = os.getenv("DB_NAME", "nexus_x402")
-    DB_USER: str = os.getenv("DB_USER", "postgres")
-    DB_PASSWORD: str = os.getenv("DB_PASSWORD", "postgres")
-
-settings = Settings()
+class Receipt(Base):
+    __tablename__ = "receipts"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    receipt_id = Column(String, unique=True, index=True)
+    payment_id = Column(String, index=True)
+    file_path = Column(String)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow)

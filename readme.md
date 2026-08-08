@@ -14,9 +14,9 @@
   </p>
 
   <!-- Developer Card -->
-  <a href="https://github.com/pranav122005">
-    <img src="https://github-readme-stats.vercel.app/api?username=pranav122005&theme=radical&show_icons=true&hide_border=true&bg_color=0f172a" width="400" />
-  </a>
+<a href="https://github.com/pranav122005">
+  <img src="https://github-readme-stats.vercel.app/api?username=pranav122005&theme=radical&show_icons=true&hide_border=true&bg_color=0f172a" width="400" alt="Pranav's GitHub Stats" />
+</a>
 </div>
 
 <br/>

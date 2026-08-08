@@ -1,88 +1,92 @@
 <div align="center">
 
-# 🎬 NEXUS Mesh: x402 Settlement & Facilitator Mesh
-### *Next-Generation Algorand Payments for Streaming & Autonomous Agents*
+# 🌌 NEXUS Mesh 
+### *x402 Facilitator & Settlement Topology for Autonomous IoT*
 
-[![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](#)
-[![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](#)
+[![Python](https://img.shields.io/badge/Python-3.10+-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](#)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](#)
-[![Algorand](https://img.shields.io/badge/Algorand-000000.svg?style=for-the-badge&logo=algorand&logoColor=white)](#)
-[![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](#)
-[![Status](https://img.shields.io/badge/Status-Hackathon_Ready-brightgreen?style=for-the-badge)](#)
+[![Algorand](https://img.shields.io/badge/Algorand-AVM-000000.svg?style=for-the-badge&logo=algorand&logoColor=white)](#)
+[![Redis](https://img.shields.io/badge/Redis-Vault-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)](#)
+[![React](https://img.shields.io/badge/React-UI-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)](#)
 
-**Team Agni** | **Algorand Sponsor Track**
-*Lead Engineer: Bhagyesh Dedmuthe | Protocol Engineer: Pranav Dilip Nimje*
+**Team Agni • Algorand Sponsor Track**  
+*Lead Engineer: Bhagyesh Dedmuthe | Protocol Engineer: Pranav Dilip Nimje*[cite: 3]
 
 ---
 
-[About](#-about-the-project) • [Key Features](#-key-features) • [Architecture](#-architecture) • [Project Structure](#-project-structure) • [Interactive Setup](#-interactive-setup-guide) • [API & Documentation](#-api-reference)
+**[Architecture](#-7-module-mesh-architecture) • [INF-02 FinTech Specs](#-inf-02-fintech-alignment) • [Live Animation](#-interactive-hardware-topology) • [Quick Start](#-quick-start-deployment)**
 
 </div>
 
 <br/>
 
-## 🎯 About The Project
+## 🎯 Executive Summary
 
-NEXUS is an enterprise-grade, multi-chain **x402 Payment Verification & Settlement Mesh**. It operates as an open, non-custodial middleware layer that sits perfectly between API Resource Servers (such as streaming platforms, SaaS tools, or AI agent networks) and blockchain settlement networks.
+**NEXUS Mesh** is an enterprise-grade, non-custodial Verification & Settlement Mesh built to solve machine-to-machine micropayments for the IoT and AI economy[cite: 3, 6]. 
 
-By exploiting **Algorand's sub-3-second deterministic finality** and **native atomic transaction groups**, NEXUS successfully eliminates the latency, high fees, and atomicity issues common in standard EVM-based x402 facilitators—without requiring the deployment of smart contracts.
-
-> **Note:** The Netflix web application included in this repository acts purely as a **demonstration Resource Server** to visually prove the end-to-end functionality of the underlying NEXUS Settlement Mesh.
+Designed around the HTTP `402 Payment Required` pattern and the x402 payment protocol, it empowers Resource Servers to request and verify small payments before serving content[cite: 2]. By leveraging Algorand's sub-3-second deterministic finality and native atomic transaction groups, this architecture eliminates the Reorg risks and high fee overhead typical of EVM-based facilitators—without requiring the deployment of smart contracts[cite: 3, 5, 8].
 
 ---
 
-## ✨ Key Features
+## 🎥 Interactive Hardware Topology
 
-<table align="center">
-  <tr>
-    <td align="center">⚡<br/><b>Deterministic Finality</b><br/>Validates blocks under 3 seconds without Reorg risks.</td>
-    <td align="center">🛡️<br/><b>Non-Custodial Design</b><br/>Never requests or holds private keys/seed phrases.</td>
-    <td align="center">🔗<br/><b>Atomic Composability</b><br/>Payment transfers and receipts succeed or fail together natively.</td>
-  </tr>
-  <tr>
-    <td align="center">🚦<br/><b>Circuit Breaker Routing</b><br/>Dynamic failover using a strict closed/open/half-open mesh.</td>
-    <td align="center">🔐<br/><b>Replay Protection</b><br/>Dual-layer Redis idempotency locking prevents duplicate settlements.</td>
-    <td align="center">📄<br/><b>Off-chain Receipts</b><br/>HMAC-SHA256 verification and PDF invoice generation.</td>
-  </tr>
-</table>
+<div align="center">
+  <a href="https://pranav122005.github.io/CodeRush2.0_Team_Agni/architecture.html" target="_blank">
+    <img src="nexus_hardware_mesh.svg" alt="NEXUS Hardware Mesh Architecture" width="90%" style="border-radius: 12px; box-shadow: 0px 10px 30px rgba(0,0,0,0.5);" />
+  </a>
+  <p><sub><i>Figure 1: Visualization of the x402 challenge, Redis idempotency locking, and Algorand atomic settlement[cite: 3, 4]. (Click to view full-screen interactive SVG)</i></sub></p>
+</div>
 
 ---
 
-## 🏗 Architecture
+## 🛡️ INF-02 FinTech Alignment
 
-NEXUS employs a **7-Module Architecture** to ensure trust-minimization and separate security boundaries.
+This mesh was built to strictly satisfy the **INF-02 Problem Statement**[cite: 6]:
 
-### The 7 Core Modules
-<details>
-<summary><b>Click to expand Module Details</b></summary>
+| Capability | NEXUS Implementation |
+| :--- | :--- |
+| **Replay & Duplicate Protection** | Dual-layer Redis vault locks the request payload and `TxID` prior to broadcast, returning `HTTP 409 Conflict` on duplicates[cite: 3, 5, 8]. |
+| **Dynamic Facilitator Selection** | Registry utilizes a 3-state circuit breaker (`closed` → `open` → `half_open`) based on active latency and error metrics[cite: 3, 5, 8]. |
+| **Explicit State Management** | Polls Algorand's deterministic `algod` node for a terminal `CONFIRMED` state, completely bypassing probabilistic finality/Reorgs[cite: 5, 8]. |
+| **Fail Closed on Ambiguity** | Never silently retries unverified states; routes to `503` if facilitators are down or `409` if signatures mismatch[cite: 5, 8]. |
+| **Non-Custodial Design** | Never holds or requests private seed phrases; purely handles signed payload verification and atomic routing[cite: 5, 8]. |
 
-1. **Compatibility Layer:** Enforces protocol versioning and rejects unsupported `(scheme, network)` pairs.
-2. **Facilitator Registry:** A dynamic routing mesh supporting discovery, health polling, latency tracking, and a 3-state circuit breaker.
-3. **Verification Service:** Conducts strict exact-match pricing and AVM Ed25519 signature validations.
-4. **Settlement Service:** Manages idempotency via a two-layer Redis vault (Request-level + `TxID`-level) to lock against concurrent duplicate payloads.
-5. **Receipt Service:** Groups the payment transfer with a `0-ALGO Note field` and issues an off-chain independently verifiable receipt.
-6. **Observability Console:** Logs the complete timeline (PENDING → VERIFIED → SETTLING → SETTLED) utilizing a fulfillment webhook.
-7. **Extension Interface:** Provides pre/post settlement read-only hooks, passing strict semantics by value.
+---
 
-</details>
+## 🏗 7-Module Mesh Architecture
 
-### The Settlement Flow
+To ensure zero hidden custody and maximize security, the infrastructure is completely decoupled into 7 distinct modules[cite: 5, 8]:
+
+1. **Compatibility Layer:** Enforces protocol versioning and rejects unsupported `(scheme, network)` pairs[cite: 5, 8].
+2. **Facilitator Registry:** Manages capability discovery, health checks, and priority-based routing.
+3. **Verification Service:** Validates Ed25519 signatures, exact pricing, and payload expiration[cite: 3, 5, 8].
+4. **Settlement Service:** Controls the state machine (RECEIVED → IDEMPOTENCY_CLAIMED → VERIFIED → SETTLING → CONFIRMED)[cite: 5, 8].
+5. **Receipt Service:** Binds the payment to a 0-ALGO Note field and issues an off-chain HMAC-signed receipt[cite: 3, 5, 8].
+6. **Observability Console:** Traces the lifecycle end-to-end, closing the loop via a resource-server fulfillment webhook[cite: 3, 5, 8].
+7. **Extension Interface:** Provides read-only plugin hooks (e.g., `post_settle`) that pass core payment semantics strictly by value[cite: 3, 5, 8].
+
+### Settlement State Flow
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant Client as Web Client / Wallet
-    participant API as FastAPI Resource Server
-    participant Mesh as NEXUS Mesh Engine
-    participant Chain as Algorand Network
+    participant IoT as IoT Client / Agent
+    participant RS as FastAPI Resource Server
+    participant NM as NEXUS Mesh
+    participant Algo as Algorand Node
 
-    Client->>API: 1. Request Content (GET /api/v1/content)
-    API-->>Client: 2. 402 Payment Required + x402 Template
-    Client->>API: 3. Submit Signed Payload (ExactAvmScheme)
-    API->>Mesh: 4. POST /verify & /settle
-    Mesh->>Mesh: 5. SHA-256 Idempotency Lock
-    Mesh->>Chain: 6. Broadcast Atomic Group
-    Chain-->>Mesh: 7. Confirmed Finality (<3s)
-    Mesh-->>API: 8. HMAC Signed Receipt
-    API-->>Client: 9. Access Granted (200 OK)
-    API->>Mesh: 10. POST Webhook: Fulfillment Complete
+    IoT->>RS: Request Data (GET /api/v1/content)
+    RS-->>IoT: HTTP 402 Payment Required + Template
+    IoT->>RS: Submit Signed Payload (ExactAvmScheme)
+    RS->>NM: POST /verify & /settle
+    
+    rect rgb(15, 40, 30)
+    Note over NM,Algo: Core Settlement Engine
+    NM->>NM: Lock Request & TxID in Redis Vault
+    NM->>Algo: Broadcast Atomic Group (Payment + 0-ALGO Note)
+    Algo-->>NM: Deterministic Finality (< 3s)
+    end
+    
+    NM-->>RS: Issue HMAC Signed Receipt
+    RS-->>IoT: Access Granted (200 OK)
+    RS->>NM: Webhook: Fulfillment Complete
